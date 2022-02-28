@@ -1,7 +1,6 @@
-import Address from '../models/address.js';
+import Address from "../models/address.js";
 
 function State() {
-
   this.address = new Address();
 
   this.btnSave = null;
@@ -30,5 +29,18 @@ export function init() {
   state.errorCep = document.querySelector('[data-error="cep"]');
   state.errorNumber = document.querySelector('[data-error="number"]');
 
-  console.log(state);
+  state.inputNumber.addEventListener('change', handleInputNumberChange);
+}
+
+function handleInputNumberChange(event) {
+    if(event.target.value == "") {
+        setFormError("number", "Campo requirido");
+    } else {
+        setFormError("number", "");
+    }
+}
+
+function setFormError(key, value) {
+  const element = document.querySelector(`[data-error="${key}"]`);
+  element.innerHTML = value;
 }
