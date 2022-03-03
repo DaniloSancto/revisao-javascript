@@ -1,4 +1,5 @@
 import Address from "../models/address.js";
+import * as RequestService from "../services/request-service.js";
 
 function State() {
   this.address = new Address();
@@ -29,33 +30,42 @@ export function init() {
   state.errorCep = document.querySelector('[data-error="cep"]');
   state.errorNumber = document.querySelector('[data-error="number"]');
 
-  state.inputNumber.addEventListener('change', handleInputNumberChange);
-  state.btnClear.addEventListener('click', handleBtnClearClick);
+  state.inputNumber.addEventListener("change", handleInputNumberChange);
+  state.btnClear.addEventListener("click", handleBtnClearClick);
+  state.btnSave.addEventListener("click", handleBtnSaveClick);
+}
+
+async function handleBtnSaveClick(event) {
+  event.preventDefault();
+  const result = await RequestService.getJson(
+    "https://viacep.com.br/ws/83322180/json/"
+  );
+  console.log(result);
 }
 
 function handleInputNumberChange(event) {
-    if(event.target.value == "") {
-        setFormError("number", "Campo requirido");
-    } else {
-        setFormError("number", "");
-    }
+  if (event.target.value == "") {
+    setFormError("number", "Campo requirido");
+  } else {
+    setFormError("number", "");
+  }
 }
 
 function handleBtnClearClick(event) {
-    event.preventDefault();
-    clearForm();
+  event.preventDefault();
+  clearForm();
 }
 
-function clearForm(){
-    state.inputCep.value = "";
-    state.inputCity.value = "";
-    state.inputNumber.value = "";
-    state.inputStreet.value = "";
+function clearForm() {
+  state.inputCep.value = "";
+  state.inputCity.value = "";
+  state.inputNumber.value = "";
+  state.inputStreet.value = "";
 
-    setFormError("cep", "");
-    setFormError("number", "");
+  setFormError("cep", "");
+  setFormError("number", "");
 
-    state.inputCep.focus();
+  state.inputCep.focus();
 }
 
 function setFormError(key, value) {
